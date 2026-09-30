@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Salah Mumbai — a simple, private Salah companion for prayer reminders, prayer history, goals and daily worship.">
+  <meta name="theme-color" content="#0f766e">
+  <title>Salah Mumbai — Your Daily Salah Companion</title>
+
+  <style>
+    :root {
+      --primary: #0f766e;
+      --primary-dark: #115e59;
+      --accent: #c7ea3a;
+      --text: #17302f;
+      --muted: #607473;
+      --bg: #f5f8f7;
+      --card: #ffffff;
+      --border: #dfe9e7;
+      --soft: #edf7f5;
+      --max-width: 1080px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text);
+      background:
+        linear-gradient(rgba(15,118,110,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15,118,110,.035) 1px, transparent 1px),
+        var(--bg);
+      background-size: 32px 32px;
+      line-height: 1.6;
+    }
+
+    a { color: inherit; }
+
+    .container {
+      width: min(calc(100% - 36px), var(--max-width));
+      margin: 0 auto;
+    }
+
+    nav {
+      padding: 22px 0;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      text-decoration: none;
+    }
+
+    .brand-mark {
+      width: 43px;
+      height: 43px;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      color: #fff;
+      background: linear-gradient(145deg, var(--primary), #159b8e);
+      box-shadow: 0 8px 22px rgba(15,118,110,.18);
+      font-weight: 900;
+      font-size: 20px;
+    }
+
+    .brand-name {
+      font-weight: 850;
+      font-size: 19px;
+      letter-spacing: -.025em;
+    }
+
+    .brand-location {
+      display: block;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .18em;
+      margin-top: -3px;
+    }
+
+    .nav-link {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .nav-link:hover { color: var(--primary); }
+
+    .hero {
+      padding: 72px 0 78px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.08fr .92fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      color: var(--primary-dark);
+      background: var(--soft);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 18px 0 17px;
+      font-size: clamp(43px, 7vw, 72px);
+      line-height: .98;
+      letter-spacing: -.055em;
+    }
+
+    h1 span { color: var(--primary); }
+
+    .hero-copy {
+      max-width: 620px;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 20px;
+      border-radius: 13px;
+      text-decoration: none;
+      font-weight: 750;
+      font-size: 14px;
+      border: 1px solid var(--border);
+      background: #fff;
+    }
+
+    .button.primary {
+      color: #fff;
+      border-color: var(--primary);
+      background: var(--primary);
+      box-shadow: 0 10px 24px rgba(15,118,110,.18);
+    }
+
+    .button.primary:hover { background: var(--primary-dark); }
+
+    .button.secondary:hover { border-color: var(--primary); }
+
+    .phone {
+      position: relative;
+      width: min(300px, 80vw);
+      aspect-ratio: 10 / 19.5;
+      margin: 0 auto;
+      padding: 10px;
+      border-radius: 37px;
+      background: #122b2a;
+      box-shadow: 0 30px 70px rgba(17,50,47,.22);
+      transform: rotate(2deg);
+    }
+
+    .phone-screen {
+      height: 100%;
+      border-radius: 29px;
+      overflow: hidden;
+      background: linear-gradient(160deg, #eff9f7, #fff);
+    }
+
+    .notch {
+      position: absolute;
+      z-index: 2;
+      top: 15px;
+      left: 50%;
+      width: 92px;
+      height: 22px;
+      transform: translateX(-50%);
+      border-radius: 20px;
+      background: #122b2a;
+    }
+
+    .app-top {
+      padding: 43px 20px 20px;
+      color: #fff;
+      background: linear-gradient(145deg, var(--primary), #159b8e);
+    }
+
+    .app-top small { opacity: .78; }
+
+    .app-top h3 {
+      margin: 4px 0 0;
+      font-size: 23px;
+    }
+
+    .prayer-card {
+      margin: 16px;
+      padding: 18px;
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: 0 10px 28px rgba(30,70,67,.09);
+    }
+
+    .prayer-card small { color: var(--muted); }
+
+    .prayer-time {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      margin-top: 5px;
+    }
+
+    .prayer-time strong { font-size: 27px; }
+
+    .prayer-list {
+      margin: 0 16px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .prayer-list li {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 4px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+
+    .prayer-list span { color: var(--muted); }
+
+    section {
+      padding: 78px 0;
+    }
+
+    .section-head {
+      max-width: 650px;
+      margin-bottom: 34px;
+    }
+
+    .section-head h2 {
+      margin: 10px 0;
+      font-size: clamp(30px, 5vw, 43px);
+      line-height: 1.08;
+      letter-spacing: -.04em;
+    }
+
+    .section-head p { color: var(--muted); }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .feature {
+      padding: 25px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: rgba(255,255,255,.88);
+    }
+
+    .icon {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 17px;
+      border-radius: 13px;
+      background: var(--soft);
+      font-size: 21px;
+    }
+
+    .feature h3 {
+      margin: 0 0 7px;
+      font-size: 17px;
+    }
+
+    .feature p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .privacy-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 35px;
+      align-items: center;
+      padding: 42px;
+      border-radius: 28px;
+      color: #fff;
+      background: linear-gradient(135deg, #0f766e, #125f5a);
+      box-shadow: 0 24px 55px rgba(15,118,110,.18);
+    }
+
+    .privacy-box h2 {
+      margin: 0 0 12px;
+      font-size: 35px;
+      line-height: 1.1;
+      letter-spacing: -.035em;
+    }
+
+    .privacy-box p {
+      margin: 0;
+      color: rgba(255,255,255,.78);
+    }
+
+    .privacy-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .privacy-item {
+      padding: 13px 15px;
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 12px;
+      background: rgba(255,255,255,.07);
+      font-size: 14px;
+    }
+
+    .cta {
+      padding: 82px 0 95px;
+      text-align: center;
+    }
+
+    .cta h2 {
+      margin: 0 auto 13px;
+      max-width: 680px;
+      font-size: clamp(34px, 6vw, 52px);
+      line-height: 1.05;
+      letter-spacing: -.045em;
+    }
+
+    .cta p {
+      max-width: 560px;
+      margin: 0 auto;
+      color: var(--muted);
+    }
+
+    footer {
+      padding: 28px 0 42px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: center;
+    }
+
+    footer a {
+      text-decoration: none;
+      font-weight: 650;
+    }
+
+    footer a:hover { color: var(--primary); }
+
+    @media (max-width: 800px) {
+      .hero { padding-top: 42px; }
+
+      .hero-grid,
+      .privacy-box {
+        grid-template-columns: 1fr;
+      }
+
+      .phone {
+        margin-top: 10px;
+      }
+
+      .features {
+        grid-template-columns: 1fr;
+      }
+
+      .privacy-box {
+        padding: 30px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .nav-link { display: none; }
+
+      .hero {
+        padding-bottom: 45px;
+      }
+
+      section {
+        padding: 55px 0;
+      }
+
+      .buttons {
+        flex-direction: column;
+      }
+
+      .button {
+        width: 100%;
+      }
+
+      .footer-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <div class="container nav-inner">
+      <a class="brand" href="/">
+        <div class="brand-mark">S</div>
+        <div>
+          <div class="brand-name">Salah</div>
+          <span class="brand-location">MUMBAI</span>
+        </div>
+      </a>
+
+      <a class="nav-link" href="privacy-policy.html">Privacy Policy</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="badge">☾ Your daily Salah companion</span>
+          <h1>Stay connected<br>with your <span>Salah.</span></h1>
+          <p class="hero-copy">
+            Salah Mumbai is a simple prayer companion built to help you stay
+            consistent with your daily prayers, track your progress, and build
+            better Salah habits — without accounts, tracking, or unnecessary
+            data collection.
+          </p>
+
+          <div class="buttons">
+            <!-- Replace # with your Google Play Store URL after publishing -->
+            <a class="button primary" href="#" aria-label="Get Salah Mumbai on Google Play">
+              Get it on Google Play
+            </a>
+            <a class="button secondary" href="#features">
+              Explore features
+            </a>
+          </div>
+        </div>
+
+        <div class="phone" aria-label="Salah Mumbai app preview">
+          <div class="notch"></div>
+          <div class="phone-screen">
+            <div class="app-top">
+              <small>Assalamu Alaikum</small>
+              <h3>Today's Salah</h3>
+            </div>
+
+            <div class="prayer-card">
+              <small>Next prayer</small>
+              <div class="prayer-time">
+                <strong>Asr</strong>
+                <strong>04:37</strong>
+              </div>
+            </div>
+
+            <ul class="prayer-list">
+              <li><b>Fajr</b><span>05:21</span></li>
+              <li><b>Dhuhr</b><span>12:32</span></li>
+              <li><b>Asr</b><span>04:37</span></li>
+              <li><b>Maghrib</b><span>06:42</span></li>
+              <li><b>Isha</b><span>07:58</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features">
+      <div class="container">
+        <div class="section-head">
+          <span class="badge">Simple by design</span>
+          <h2>Everything you need.<br>Nothing you don't.</h2>
+          <p>
+            Salah Mumbai focuses on the essentials so you can spend less time
+            managing an app and more time focusing on your Salah.
+          </p>
+        </div>
+
+        <div class="features">
+          <div class="feature">
+            <div class="icon">🕌</div>
+            <h3>Prayer reminders</h3>
+            <p>
+              Receive local reminders for your daily prayers, scheduled
+              directly on your Android device.
+            </p>
+          </div>
+
+          <div class="feature">
+            <div class="icon">📖</div>
+            <h3>Prayer history</h3>
+            <p>
+              Keep track of your Salah progress and build awareness of your
+              daily prayer routine.
+            </p>
+          </div>
+
+          <div class="feature">
+            <div class="icon">🎯</div>
+            <h3>Salah goals</h3>
+            <p>
+              Set personal goals and use simple progress tracking to encourage
+              consistency.
+            </p>
+          </div>
+
+          <div class="feature">
+            <div class="icon">🔔</div>
+            <h3>Local notifications</h3>
+            <p>
+              No push tokens or notification servers. Reminders are scheduled
+              locally on your device.
+            </p>
+          </div>
+
+          <div class="feature">
+            <div class="icon">🔒</div>
+            <h3>Privacy first</h3>
+            <p>
+              No login, no cloud account, no analytics, no advertising, and no
+              tracking.
+            </p>
+          </div>
+
+          <div class="feature">
+            <div class="icon">📱</div>
+            <h3>Stored on your device</h3>
+            <p>
+              Prayer history, goals, reminders, and preferences stay in local
+              storage on your Android device.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="privacy-box">
+          <div>
+            <h2>Your Salah data stays with you.</h2>
+            <p>
+              Salah Mumbai is designed around a local-first approach. Your
+              prayer history and goals are stored on your device and are not
+              uploaded to our servers.
+            </p>
+          </div>
+
+          <div class="privacy-list">
+            <div class="privacy-item">✓ No account or login</div>
+            <div class="privacy-item">✓ No location permission</div>
+            <div class="privacy-item">✓ No analytics or tracking</div>
+            <div class="privacy-item">✓ No advertising</div>
+            <div class="privacy-item">✓ No cloud sync</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="container">
+        <h2>Make Salah a consistent part of your day.</h2>
+        <p>
+          A focused, simple companion for your daily prayer routine.
+        </p>
+
+        <div class="buttons" style="justify-content:center;">
+          <!-- Replace # with your Google Play Store URL after publishing -->
+          <a class="button primary" href="#">Get Salah Mumbai</a>
+          <a class="button secondary" href="privacy-policy.html">Read Privacy Policy</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div>© 2026 Salah Mumbai. Made with care.</div>
+      <a href="privacy-policy.html">Privacy Policy</a>
+    </div>
+  </footer>
+</body>
+</html>
